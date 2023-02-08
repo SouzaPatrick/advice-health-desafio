@@ -2,15 +2,50 @@ import json
 
 from flask import Response
 
+from app.db_function import create_user_test
+
+import pytest
+
 
 def test_health_check(client):
     response: Response = client.get("/health-check")
     assert response.status_code == 200
 
+def test_login(client, app):
+    # Create user test
+    with app.app_context():
+        create_user_test()
 
-def test_car(client):
+    # Send request
     headers: dict = {
         "Content-Type": "application/json;charset=UTF-8",
+        "Authorization": "Basic YWR2aWNlaGVhbHRoOmFkdmljZWhlYWx0aA==",
+    }
+    response: Response = client.post("/api/login", headers=headers)
+    assert response.status_code == 200
+
+@pytest.fixture
+def get_token(client, app):
+    # Populate db
+    with app.app_context():
+        create_user_test()
+
+    # Get token
+    get_token_headers: dict = {
+        "Content-Type": "application/json;charset=UTF-8",
+        "Authorization": "Basic YWR2aWNlaGVhbHRoOmFkdmljZWhlYWx0aA==",
+    }
+    token: str = (
+        client.post("/api/login", headers=get_token_headers).get_json().get("token")
+    )
+
+    return token
+
+def test_car(client, get_token):
+    # Send request
+    headers: dict = {
+        "Content-Type": "application/json;charset=UTF-8",
+        "Authorization": f"Bearer {get_token}",
     }
     data: dict = {
         "owner": {"name": "Augusto", "cpf": "68175541016"},
@@ -25,9 +60,10 @@ def test_car(client):
     assert response.status_code == 200
 
 
-def test_car_invalid_color(client):
+def test_invalid_car_color(client, get_token):
     headers: dict = {
         "Content-Type": "application/json;charset=UTF-8",
+        "Authorization": f"Bearer {get_token}",
     }
     data: dict = {
         "owner": {"name": "Augusto", "cpf": "68175541016"},
@@ -42,6 +78,30 @@ def test_car_invalid_color(client):
             "0": {
                 "color": {
                     "error_message": "orange color is invalid, enter a valid color for the car"
+                }
+            }
+        }
+    }
+
+
+def test_invalid_car_model(client, get_token):
+    headers: dict = {
+        "Content-Type": "application/json;charset=UTF-8",
+        "Authorization": f"Bearer {get_token}",
+    }
+    data: dict = {
+        "owner": {"name": "Augusto", "cpf": "68175541016"},
+        "cars": [
+            {"model": "other", "color": "blue"},
+        ],
+    }
+    response: Response = client.post("/api/car", headers=headers, data=json.dumps(data))
+    assert response.status_code == 400
+    assert response.get_json() == {
+        "cars": {
+            "0": {
+                "model": {
+                    "error_message": "other model is invalid, enter a valid model for the car"
                 }
             }
         }

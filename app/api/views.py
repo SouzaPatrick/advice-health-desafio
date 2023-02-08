@@ -5,6 +5,8 @@ from marshmallow.exceptions import ValidationError
 
 from app.schema import OwnerCarSchema
 
+from tools.auth import auth, token_required
+
 from . import api
 
 
@@ -12,9 +14,14 @@ from . import api
 def health_check():
     return jsonify({"message": "success"}), 200
 
+@api.route("/api/login", methods=["POST"])
+def login():
+    return auth()
+
 
 @api.route("/api/car", methods=["POST"])
-def car():
+@token_required
+def car(current_user):
     data: dict = request.get_json()
     try:
         schema: Optional[dict] = OwnerCarSchema().load(data)

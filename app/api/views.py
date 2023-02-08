@@ -22,5 +22,4 @@ def car():
     except ValidationError as error:
         response_json = error.normalized_messages()
         return jsonify(response_json), 400
-
     return jsonify({"message": "success"}), 200

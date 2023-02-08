@@ -1,17 +1,26 @@
 from flask_marshmallow.fields import fields
+from marshmallow import validates
+from marshmallow.exceptions import ValidationError
 
 from app import ma
+from tools.person_docs_helper import validate_cpf
 
 
 class OwnerSchema(ma.Schema):
     name = fields.Str(required=True)
-    driver_licence = fields.Str(required=True)
+    cpf = fields.Str(required=True)
 
     class Meta:
         fields = (
             "name",
-            "driver_licence",
+            "cpf",
         )
+
+    @validates("cpf")
+    def validate_document(self, cpf):
+        if not validate_cpf(cpf):
+            raise ValidationError({"error_message": "Invalid document number"})
+        return cpf
 
 
 class CarSchema(ma.Schema):

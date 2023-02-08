@@ -13,7 +13,7 @@ def test_car(client):
         "Content-Type": "application/json;charset=UTF-8",
     }
     data: dict = {
-        "owner": {"name": "Augusto", "driver_licence": "2554415"},
+        "owner": {"name": "Augusto", "cpf": "68175541016"},
         "cars": [
             {"model": "hatch", "color": "blue"},
             {"model": "sedan", "color": "yellow"},

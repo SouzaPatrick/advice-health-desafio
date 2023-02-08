@@ -1,9 +1,9 @@
-IMAGE_NAME=flask-advice-health
-CONTAINER_NAME=flask-advice-health
+IMAGE_NAME=flask-python-sample
+CONTAINER_NAME=flask-python-sample
 
 ## @ Project
 .PHONY: install up generate_db down
-install: generate_db build up # Generate the backend image and upload ALL containers in the project
+install: build up generate_db # Generate the backend image and upload ALL containers in the project
 
 up: ## Starts ALL containers in the project
 	@docker-compose up -d
@@ -15,8 +15,8 @@ build: ## Create flask image from project
 	@docker build -t ${IMAGE_NAME}:latest .
 	@sleep 10
 
-generate_db: ## Create a SQLite database and add all tables in it
-	@python generate_db.py
+generate_db:
+	@docker exec -i ${CONTAINER_NAME} sh -c "python generate_db.py"
 
 ## @ Pre-commit
 .PHONY: format

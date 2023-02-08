@@ -1,13 +1,13 @@
 version: "3"
 services:
   web:
-    image: flask-advice-health:latest
-    container_name: flask-advice-health
+    image: flask-python-sample:latest
+    container_name: flask-python-sample
     restart: always
     ports:
       - "5000:5000"
     volumes:
-      - ./database.db:/usr/src/app/database.db
+      - ./:/usr/src/app/
     healthcheck:
       test: [ "CMD-SHELL", "curl --silent --fail localhost:5000/health-check || exit 1" ]
       interval: 10s

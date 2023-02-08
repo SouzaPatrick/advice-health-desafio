@@ -19,6 +19,8 @@ def token_required(f):
             # TODO replace "123" by app.config["SECRET_KEY"]
             data = jwt.decode(token, "123", algorithms=["HS256"])
             current_user = get_user_by_username(username=data["username"])
+            if not current_user:
+                return jsonify({"error_message": "token is invalid or expired"}), 401
         except:
             return jsonify({"error_message": "token is invalid or expired"}), 401
         return f(current_user, *args, **kwargs)

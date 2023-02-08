@@ -6,6 +6,7 @@ from flask import jsonify, request
 
 from app.db_function import get_user_by_username
 from app.models import User
+from typing import Optional
 
 
 def token_required(f):
@@ -37,7 +38,7 @@ def auth():
             ),
             401,
         )
-    user: User = get_user_by_username(auth.username)
+    user: Optional[User] = get_user_by_username(auth.username)
     if not user:
         return jsonify({"error_message": "user not found"}), 401
 

@@ -57,7 +57,7 @@ def test_car(client, get_token):
     }
     response: Response = client.post("/api/car", headers=headers, data=json.dumps(data))
     assert response.get_json() == {"message": "success"}
-    assert response.status_code == 200
+    assert response.status_code == 201
 
 
 def test_invalid_car_color(client, get_token):

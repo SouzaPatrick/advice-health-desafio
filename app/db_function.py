@@ -21,7 +21,7 @@ def get_user_by_username(username) -> Optional[User]:
 
 
 def create_user_test() -> NoReturn:
-    user: User = User(username="advicehealth", send_cashback=True)
+    user: User = User(username="advicehealth")
     user.generate_password("advicehealth")
 
     with Session(current_app.engine) as session:

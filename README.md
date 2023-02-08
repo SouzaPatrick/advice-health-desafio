@@ -18,7 +18,7 @@ make install
 ###### [Run project with venv](docs/start_project_venv.md)
 
 ## Rotes
-PS: To make it easier, I exported the [Postman collection](https://drive.google.com/drive/folders/1UD04eMe_aF2aHHJmRTCFw_3iMzDIypqt?usp=sharing), just use the Flask API
+PS: To make it easier, I exported the [Postman collection](https://drive.google.com/drive/folders/1R-cfzdaI3WSPLX3GcxRHXrELBrQPkv2w?usp=sharing), just use the Flask API
 In the login route, I used the ```Basic Auth```, sent in the ```header```. The body is sent empty
 #### Header
 ```json
@@ -85,7 +85,7 @@ POST http://localhost:5000/api/car
 - [x] Create authentication
 - [x] Use docker
 - [x] Add unit tests
-- [ ] Validate max of cars per inhabitant/owner, maximum of 3
+- [x] Validate max of cars per inhabitant/owner, maximum of 3
 
 Bonus
 - [x] Run it all in just one command

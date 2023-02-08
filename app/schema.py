@@ -7,7 +7,7 @@ from marshmallow.exceptions import ValidationError
 from app import ma
 from app.db_function import add_cars_in_owner, create_owner, get_owner_and_cars
 from app.models import Owner
-from tools.person_docs_helper import validate_cpf
+from tools.person_docs_helper import remove_mask_cpf, validate_cpf
 
 
 class OwnerSchema(ma.Schema):
@@ -72,7 +72,8 @@ class OwnerCarSchema(ma.Schema):
 
     @post_load
     def validate(self, data, **kwargs) -> Optional[dict]:
-        owner: Owner = get_owner_and_cars(cpf=data.get("owner").get("cpf"))
+        owner_cpf: str = remove_mask_cpf(data.get("owner").get("cpf"))
+        owner: Owner = get_owner_and_cars(cpf=owner_cpf)
         if owner is not None:
             if len(owner.cars) == 3:
                 raise ValidationError(
@@ -88,9 +89,7 @@ class OwnerCarSchema(ma.Schema):
                 )
         else:
             owner: Owner = create_owner(
-                owner=Owner(
-                    name=data.get("owner").get("name"), cpf=data.get("owner").get("cpf")
-                )
+                owner=Owner(name=data.get("owner").get("name"), cpf=owner_cpf)
             )
 
         if len(data.get("cars")) > 3:

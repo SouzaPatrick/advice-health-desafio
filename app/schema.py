@@ -33,6 +33,17 @@ class CarSchema(ma.Schema):
             "color",
         )
 
+    @validates("color")
+    def validate_color(self, color):
+        allowed_colors: list = ["yellow", "blue", "gray"]
+        if color not in allowed_colors:
+            raise ValidationError(
+                {
+                    "error_message": f"{color} color is invalid, enter a valid color for the car"
+                }
+            )
+        return color
+
 
 class OwnerCarSchema(ma.Schema):
     owner: OwnerSchema = fields.Nested(OwnerSchema, required=True)

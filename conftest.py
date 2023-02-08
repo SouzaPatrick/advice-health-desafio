@@ -5,6 +5,7 @@ from sqlmodel.pool import StaticPool
 from app import create_app
 
 
+
 @pytest.fixture(name="engine")
 def engine_fixture():  #
     engine = create_engine(
@@ -23,8 +24,3 @@ def app(engine):
         }
     )
     yield app
-
-
-@pytest.fixture()
-def runner(app):
-    return app.test_cli_runner()

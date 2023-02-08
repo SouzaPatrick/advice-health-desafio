@@ -20,7 +20,7 @@ def get_user_by_username(username) -> Optional[User]:
     return result
 
 
-def create_user_test():
+def create_user_test() -> NoReturn:
     user: User = User(username="advicehealth", send_cashback=True)
     user.generate_password("advicehealth")
 
@@ -51,7 +51,7 @@ def add_cars_in_owner(owner_id: int, cars: list[dict]) -> NoReturn:
             session.commit()
 
 
-def create_owner(owner: Owner):
+def create_owner(owner: Owner) -> Owner:
     with Session(current_app.engine) as session:
         session.add(owner)
         session.commit()

@@ -19,5 +19,5 @@ with app.app_context():
     create_user_test()
 
 print("DB successfully reset")
-print("Create user test: 'username'='advicehealth' 'password'='advicehealth")
+print("Create user test: 'username'='advicehealth' 'password'='advicehealth'")
 print("Authentication through Basic Auth")

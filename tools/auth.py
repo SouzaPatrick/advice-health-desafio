@@ -1,12 +1,12 @@
 import datetime
 from functools import wraps
+from typing import Optional
 
 import jwt
 from flask import jsonify, request
 
 from app.db_function import get_user_by_username
 from app.models import User
-from typing import Optional
 
 
 def token_required(f):

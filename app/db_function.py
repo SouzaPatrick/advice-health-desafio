@@ -1,8 +1,11 @@
+from typing import NoReturn, Optional
+
 from flask import current_app
-from sqlmodel import Session, select
+from sqlalchemy.orm import joinedload
 from sqlalchemy.orm.exc import NoResultFound
-from typing import Optional
-from .models import User
+from sqlmodel import Session, select
+
+from .models import Car, Owner, User
 
 
 def get_user_by_username(username) -> Optional[User]:
@@ -16,6 +19,7 @@ def get_user_by_username(username) -> Optional[User]:
 
     return result
 
+
 def create_user_test():
     user: User = User(username="advicehealth", send_cashback=True)
     user.generate_password("advicehealth")
@@ -24,3 +28,32 @@ def create_user_test():
         session.add(user)
         session.commit()
         session.refresh(user)
+
+
+def get_owner_and_cars(cpf: str) -> Optional[Owner]:
+    query = select(Owner).where(Owner.cpf == cpf).options(joinedload("cars"))
+    try:
+        with Session(current_app.engine) as session:
+            result: Optional[Owner] = session.execute(query).scalars().unique().one()
+    except NoResultFound:
+        result: Optional[Owner] = None
+
+    return result
+
+
+def add_cars_in_owner(owner_id: int, cars: list[dict]) -> NoReturn:
+    for car in cars:
+        car: Car = Car(
+            model=car.get("model"), color=car.get("color"), owner_id=owner_id
+        )
+        with Session(current_app.engine) as session:
+            session.add(car)
+            session.commit()
+
+
+def create_owner(owner: Owner):
+    with Session(current_app.engine) as session:
+        session.add(owner)
+        session.commit()
+        session.refresh(owner)
+    return owner

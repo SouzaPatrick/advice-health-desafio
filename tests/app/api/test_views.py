@@ -1,15 +1,15 @@
 import json
 
+import pytest
 from flask import Response
 
 from app.db_function import create_user_test
-
-import pytest
 
 
 def test_health_check(client):
     response: Response = client.get("/health-check")
     assert response.status_code == 200
+
 
 def test_login(client, app):
     # Create user test
@@ -23,6 +23,7 @@ def test_login(client, app):
     }
     response: Response = client.post("/api/login", headers=headers)
     assert response.status_code == 200
+
 
 @pytest.fixture
 def get_token(client, app):
@@ -40,6 +41,7 @@ def get_token(client, app):
     )
 
     return token
+
 
 def test_car(client, get_token):
     # Send request

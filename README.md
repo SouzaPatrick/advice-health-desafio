@@ -85,7 +85,7 @@ POST http://localhost:5000/api/car
 - [x] Create authentication
 - [x] Use docker
 - [x] Add unit tests
-- [ ] Validar max de carros por habitante/proprietario, maximo de 3
+- [ ] Validate max of cars per inhabitant/owner, maximum of 3
 
 Bonus
 - [x] Run it all in just one command

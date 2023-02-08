@@ -1,13 +1,17 @@
-from flask import jsonify, request
 from typing import Optional
+
+from flask import jsonify, request
 from marshmallow.exceptions import ValidationError
+
 from app.schema import OwnerCarSchema
 
 from . import api
 
+
 @api.route("/health-check", methods=["GET"])
 def health_check():
     return jsonify({"message": "success"}), 200
+
 
 @api.route("/api/car", methods=["POST"])
 def car():

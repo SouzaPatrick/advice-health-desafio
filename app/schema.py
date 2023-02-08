@@ -1,6 +1,7 @@
-from typing import List
-from app import ma
 from flask_marshmallow.fields import fields
+
+from app import ma
+
 
 class OwnerSchema(ma.Schema):
     name = fields.Str(required=True)
@@ -23,9 +24,10 @@ class CarSchema(ma.Schema):
             "color",
         )
 
+
 class OwnerCarSchema(ma.Schema):
     owner: OwnerSchema = fields.Nested(OwnerSchema, required=True)
-    cars: List[CarSchema] = fields.Nested(CarSchema,  many=True)
+    cars: list[CarSchema] = fields.Nested(CarSchema, many=True)
 
     class Meta:
         fields = (
